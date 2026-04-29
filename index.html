@@ -1,0 +1,525 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>あまじ</title>
+  <style>
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    :root {
+      --bg: #f5f6fa;
+      --card: #ffffff;
+      --border: #e2e4ed;
+      --text-primary: #1a1d27;
+      --text-secondary: #6b7080;
+      --accent: #5a6ef0;
+      --accent-hover: #4055e8;
+      --shadow-sm: 0 2px 8px rgba(0,0,0,0.07), 0 1px 2px rgba(0,0,0,0.04);
+      --shadow-md: 0 8px 24px rgba(0,0,0,0.10), 0 2px 6px rgba(0,0,0,0.06);
+      --shadow-lg: 0 16px 40px rgba(0,0,0,0.12), 0 4px 10px rgba(0,0,0,0.07);
+    }
+
+    body {
+      background-color: var(--bg);
+      color: var(--text-primary);
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+      min-height: 100vh;
+    }
+
+    /* ── Nav ── */
+    nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 16px 24px;
+      border-bottom: 1px solid var(--border);
+      position: sticky;
+      top: 0;
+      background: rgba(245, 246, 250, 0.85);
+      backdrop-filter: blur(12px);
+      z-index: 10;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .nav-logo {
+      font-weight: 700;
+      font-size: 1rem;
+      color: var(--text-primary);
+      cursor: pointer;
+      text-decoration: none;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 8px;
+    }
+
+    .nav-link {
+      background: none;
+      border: none;
+      color: var(--text-secondary);
+      cursor: pointer;
+      font-size: 0.9rem;
+      padding: 6px 14px;
+      border-radius: 8px;
+      transition: color 0.2s, background 0.2s;
+      font-family: inherit;
+    }
+
+    .nav-link:hover,
+    .nav-link.active {
+      color: var(--text-primary);
+      background: rgba(255,255,255,0.06);
+    }
+
+    .nav-link.active {
+      color: var(--accent);
+    }
+
+    /* ── Page wrapper ── */
+    .page {
+      display: none;
+      min-height: calc(100vh - 57px);
+    }
+
+    .page.visible {
+      display: block;
+    }
+
+    /* ── Profile page ── */
+    #page-profile {
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 48px 16px;
+    }
+
+    #page-profile.visible {
+      display: flex;
+    }
+
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 48px 40px;
+      max-width: 480px;
+      width: 100%;
+      text-align: center;
+      box-shadow: var(--shadow-lg);
+    }
+
+    .avatar {
+      width: 96px;
+      height: 96px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--accent), #a78bfa);
+      margin: 0 auto 24px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 40px;
+      font-weight: 700;
+      color: #fff;
+      letter-spacing: -1px;
+      box-shadow: 0 8px 20px rgba(90, 110, 240, 0.35);
+    }
+
+    .name {
+      font-size: 1.75rem;
+      font-weight: 700;
+      letter-spacing: -0.5px;
+      margin-bottom: 6px;
+    }
+
+    .profile-title {
+      font-size: 0.95rem;
+      color: var(--accent);
+      font-weight: 500;
+      letter-spacing: 0.5px;
+      margin-bottom: 24px;
+    }
+
+    .divider {
+      height: 1px;
+      background: var(--border);
+      margin: 0 auto 24px;
+      width: 60px;
+    }
+
+    .bio {
+      font-size: 0.93rem;
+      line-height: 1.8;
+      color: var(--text-secondary);
+      margin-bottom: 32px;
+    }
+
+    .links {
+      display: flex;
+      justify-content: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .link-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: transparent;
+      border: 1px solid var(--border);
+      color: var(--text-primary);
+      text-decoration: none;
+      padding: 10px 20px;
+      border-radius: 10px;
+      font-size: 0.88rem;
+      font-weight: 500;
+      transition: border-color 0.2s, color 0.2s, background 0.2s, box-shadow 0.2s, transform 0.2s;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .link-btn:hover {
+      border-color: var(--accent);
+      color: var(--accent-hover);
+      background: rgba(90, 110, 240, 0.06);
+      box-shadow: var(--shadow-md);
+      transform: translateY(-1px);
+    }
+
+    .link-btn svg { flex-shrink: 0; }
+
+    /* ── Blog list page ── */
+    #page-blog {
+      padding: 48px 16px;
+    }
+
+    .blog-header {
+      max-width: 680px;
+      margin: 0 auto 36px;
+    }
+
+    .blog-header h2 {
+      font-size: 1.5rem;
+      font-weight: 700;
+      margin-bottom: 6px;
+    }
+
+    .blog-header p {
+      color: var(--text-secondary);
+      font-size: 0.9rem;
+    }
+
+    .article-list {
+      max-width: 680px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .article-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 24px 28px;
+      cursor: pointer;
+      transition: border-color 0.2s, transform 0.2s, box-shadow 0.2s;
+      text-decoration: none;
+      display: block;
+      color: inherit;
+      box-shadow: var(--shadow-md);
+    }
+
+    .article-card:hover {
+      border-color: var(--accent);
+      transform: translateY(-3px);
+      box-shadow: var(--shadow-lg);
+    }
+
+    .article-card-meta {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 10px;
+    }
+
+    .article-tag {
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: var(--accent);
+      background: rgba(108, 127, 255, 0.12);
+      padding: 3px 10px;
+      border-radius: 999px;
+    }
+
+    .article-date {
+      font-size: 0.8rem;
+      color: var(--text-secondary);
+    }
+
+    .article-card h3 {
+      font-size: 1.05rem;
+      font-weight: 600;
+      margin-bottom: 8px;
+      line-height: 1.5;
+    }
+
+    .article-card p {
+      font-size: 0.88rem;
+      color: var(--text-secondary);
+      line-height: 1.7;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    /* ── Article detail page ── */
+    #page-article {
+      padding: 48px 16px;
+    }
+
+    .article-back {
+      max-width: 680px;
+      margin: 0 auto 28px;
+    }
+
+    .back-btn {
+      background: none;
+      border: none;
+      color: var(--text-secondary);
+      cursor: pointer;
+      font-size: 0.88rem;
+      font-family: inherit;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 0;
+      transition: color 0.2s;
+    }
+
+    .back-btn:hover { color: var(--text-primary); }
+
+    .article-body {
+      max-width: 680px;
+      margin: 0 auto;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 40px 44px;
+      box-shadow: var(--shadow-lg);
+    }
+
+    .article-body .article-card-meta {
+      margin-bottom: 16px;
+    }
+
+    .article-body h1 {
+      font-size: 1.6rem;
+      font-weight: 700;
+      line-height: 1.4;
+      margin-bottom: 28px;
+    }
+
+    .article-content {
+      font-size: 0.95rem;
+      line-height: 1.9;
+      color: var(--text-secondary);
+    }
+
+    .article-content p { margin-bottom: 20px; }
+    .article-content h2 {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--text-primary);
+      margin: 32px 0 12px;
+    }
+    .article-content ul {
+      padding-left: 20px;
+      margin-bottom: 20px;
+    }
+    .article-content li { margin-bottom: 6px; }
+    .article-content img {
+      width: 100%;
+      border-radius: 12px;
+      margin-top: 8px;
+      box-shadow: var(--shadow-md);
+      display: block;
+    }
+    .article-content figure {
+      margin-top: 8px;
+    }
+    .article-content figcaption {
+      text-align: center;
+      font-size: 0.8rem;
+      color: var(--text-secondary);
+      margin-top: 10px;
+      letter-spacing: 0.08em;
+    }
+    .article-content figcaption::before {
+      content: '— ';
+    }
+    .article-content figcaption::after {
+      content: ' —';
+    }
+
+    /* ── Animations ── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .fade-in {
+      animation: fadeUp 0.5s ease forwards;
+    }
+
+    /* ── Responsive ── */
+    @media (max-width: 480px) {
+      .card { padding: 36px 24px; }
+      .name { font-size: 1.5rem; }
+      .article-body { padding: 28px 20px; }
+      .article-body h1 { font-size: 1.3rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <nav>
+    <a class="nav-logo" onclick="navigate('profile')">あまじ</a>
+    <div class="nav-links">
+      <button class="nav-link" data-page="profile" onclick="navigate('profile')">プロフィール</button>
+      <button class="nav-link" data-page="blog" onclick="navigate('blog')">ブログ</button>
+    </div>
+  </nav>
+
+  <!-- Profile -->
+  <div id="page-profile" class="page">
+    <div class="card fade-in">
+      <div class="avatar">あ</div>
+      <h1 class="name">あまじ</h1>
+      <p class="profile-title">学生</p>
+      <div class="divider"></div>
+      <p class="bio">旅行が好き</p>
+      <div class="links">
+        <a class="link-btn" href="https://x.com/amazi112" target="_blank" rel="noopener">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.746l7.73-8.835L1.254 2.25H8.08l4.261 5.632 5.903-5.632Zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
+          </svg>
+          X (Twitter)
+        </a>
+        <button class="link-btn" onclick="navigate('blog')">
+          ブログを読む
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Blog list -->
+  <div id="page-blog" class="page">
+    <div class="blog-header fade-in">
+      <h2>ブログ</h2>
+      <p>旅や日常のことを書いています。</p>
+    </div>
+    <div class="article-list fade-in" id="article-list"></div>
+  </div>
+
+  <!-- Article detail -->
+  <div id="page-article" class="page">
+    <div class="article-back">
+      <button class="back-btn" onclick="navigate('blog')">
+        ← 記事一覧に戻る
+      </button>
+    </div>
+    <div class="article-body fade-in" id="article-body"></div>
+  </div>
+
+  <script>
+    const articles = [
+      {
+        id: 1,
+        tag: '旅行',
+        date: '2026年4月29日',
+        title: '初めて一人旅をした話',
+        excerpt: '大学生になって初めて一人旅に行ってみた。行き先は京都。新幹線に乗り込む瞬間から、なんとも言えない解放感があった。',
+        content: `
+          <p>大学に入学して最初の春休み、思い切って一人で京都へ行ってみた。</p>
+          <p>一人旅なんて初めてで、出発前は少し不安だったけど、新幹線に乗り込んだ瞬間から気持ちが晴れた。誰かに合わせなくていい、自分のペースで動ける。その感覚がとにかく気持ちよかった。</p>
+          <h2>行った場所</h2>
+          <ul>
+            <li>伏見稲荷大社（早朝に行ったら人が少なくてよかった）</li>
+            <li>哲学の道（桜がきれいだった）</li>
+            <li>錦市場（食べ歩きが楽しい）</li>
+          </ul>
+          <p>一番印象に残っているのは、伏見稲荷を早朝に訪れたこと。観光客がほとんどいなくて、静かな山道を一人で歩いた。鳥居が続く道を歩きながら、「ああ、来てよかったな」と素直に思えた。</p>
+          <h2>一人旅のよさ</h2>
+          <p>自分が疲れたら休める。気になったお店に立ち寄れる。誰かに気を遣わなくていい。これだけで十分すぎるくらい満足だった。次はどこに行こうか、もう考え始めている。</p>
+          <figure>
+            <img src="images/PXL_20260401_004640821.jpg" alt="京都で食べた朝ごはん" />
+            <figcaption>京都で食べた朝ごはん</figcaption>
+          </figure>
+        `
+      }
+    ];
+
+    function renderArticleList() {
+      const list = document.getElementById('article-list');
+      list.innerHTML = articles.map(a => `
+        <div class="article-card" onclick="openArticle(${a.id})">
+          <div class="article-card-meta">
+            <span class="article-tag">${a.tag}</span>
+            <span class="article-date">${a.date}</span>
+          </div>
+          <h3>${a.title}</h3>
+          <p>${a.excerpt}</p>
+        </div>
+      `).join('');
+    }
+
+    function openArticle(id) {
+      const a = articles.find(x => x.id === id);
+      if (!a) return;
+      document.getElementById('article-body').innerHTML = `
+        <div class="article-card-meta">
+          <span class="article-tag">${a.tag}</span>
+          <span class="article-date">${a.date}</span>
+        </div>
+        <h1>${a.title}</h1>
+        <div class="article-content">${a.content}</div>
+      `;
+      navigate('article');
+    }
+
+    function navigate(page) {
+      document.querySelectorAll('.page').forEach(el => el.classList.remove('visible'));
+      document.querySelectorAll('.nav-link').forEach(el => el.classList.remove('active'));
+
+      const target = document.getElementById('page-' + page);
+      if (target) {
+        target.classList.add('visible');
+        // re-trigger fade animation
+        target.querySelectorAll('.fade-in').forEach(el => {
+          el.style.animation = 'none';
+          el.offsetHeight;
+          el.style.animation = '';
+        });
+      }
+
+      const activeBtn = document.querySelector(`.nav-link[data-page="${page}"]`);
+      if (activeBtn) activeBtn.classList.add('active');
+
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      location.hash = page === 'profile' ? '' : page;
+    }
+
+    renderArticleList();
+
+    // hash-based routing on load
+    const hash = location.hash.replace('#', '');
+    navigate(['blog', 'article'].includes(hash) ? hash : 'profile');
+  </script>
+</body>
+</html>
