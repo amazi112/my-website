@@ -26,9 +26,27 @@
 
     body {
       background-color: var(--bg);
+      background-image: url('images/IMG_1140.jpg');
+      background-size: cover;
+      background-position: center;
+      background-attachment: fixed;
       color: var(--text-primary);
       font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
       min-height: 100vh;
+    }
+
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background: rgba(245, 246, 250, 0.82);
+      backdrop-filter: blur(2px);
+      z-index: 0;
+    }
+
+    nav, .page {
+      position: relative;
+      z-index: 1;
     }
 
     /* ── Nav ── */
