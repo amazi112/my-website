@@ -52,29 +52,37 @@
     /* ── Nav ── */
     nav {
       display: flex;
+      flex-direction: column;
       align-items: center;
-      justify-content: space-between;
-      padding: 16px 24px;
-      border-bottom: 1px solid var(--border);
+      gap: 12px;
+      padding: 20px 24px;
       position: sticky;
       top: 0;
-      background: rgba(245, 246, 250, 0.85);
-      backdrop-filter: blur(12px);
+      background: rgba(245, 246, 250, 0.88);
+      backdrop-filter: blur(16px);
       z-index: 10;
       box-shadow: var(--shadow-sm);
+      border-bottom: 1px solid var(--border);
     }
 
     .nav-logo {
-      font-weight: 700;
-      font-size: 1rem;
+      font-weight: 800;
+      font-size: 1.15rem;
       color: var(--text-primary);
       cursor: pointer;
       text-decoration: none;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
     }
 
     .nav-links {
       display: flex;
-      gap: 8px;
+      gap: 6px;
+      background: rgba(255,255,255,0.7);
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      padding: 5px;
+      box-shadow: var(--shadow-sm);
     }
 
     .nav-link {
@@ -82,27 +90,30 @@
       border: none;
       color: var(--text-secondary);
       cursor: pointer;
-      font-size: 0.9rem;
-      padding: 6px 14px;
-      border-radius: 8px;
-      transition: color 0.2s, background 0.2s;
+      font-size: 0.85rem;
+      font-weight: 600;
+      padding: 7px 20px;
+      border-radius: 999px;
+      transition: color 0.2s, background 0.2s, box-shadow 0.2s;
       font-family: inherit;
+      letter-spacing: 0.03em;
     }
 
-    .nav-link:hover,
-    .nav-link.active {
+    .nav-link:hover {
       color: var(--text-primary);
-      background: rgba(255,255,255,0.06);
+      background: rgba(255,255,255,0.9);
     }
 
     .nav-link.active {
-      color: var(--accent);
+      color: #fff;
+      background: var(--accent);
+      box-shadow: 0 2px 8px rgba(90, 110, 240, 0.35);
     }
 
     /* ── Page wrapper ── */
     .page {
       display: none;
-      min-height: calc(100vh - 57px);
+      min-height: calc(100vh - 90px);
     }
 
     .page.visible {
